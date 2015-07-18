@@ -24,39 +24,33 @@
 package org.opentdc.tags.opencrx;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import org.openmdx.base.exception.ServiceException;
 import org.opentdc.opencrx.AbstractOpencrxServiceProvider;
-import org.opentdc.tags.TagsModel;
-import org.opentdc.tags.ServiceProvider;
 import org.opentdc.service.LocalizedTextModel;
 import org.opentdc.service.exception.DuplicateException;
 import org.opentdc.service.exception.InternalServerErrorException;
 import org.opentdc.service.exception.NotFoundException;
 import org.opentdc.service.exception.ValidationException;
+import org.opentdc.tags.ServiceProvider;
+import org.opentdc.tags.TagTextModel;
+import org.opentdc.tags.TagsModel;
 
 /**
- * Implementation of RatesService with OpenCRX
- * @author Bruno Kaiser
+ * Tags service for openCRX.
  *
  */
 public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider implements ServiceProvider {
 	
-	public static final short ACTIVITY_GROUP_TYPE_PROJECT = 40;
-	public static final short ACCOUNT_ROLE_CUSTOMER = 100;
-	public static final short ACTIVITY_CLASS_INCIDENT = 2;
-	public static final short ICAL_TYPE_NA = 0;
-	public static final short ICAL_CLASS_NA = 0;
-	public static final short ICAL_TYPE_VEVENT = 1;
-
-	// instance variables
-	// private static final Logger logger = Logger.getLogger(OpencrxServiceProvider.class.getName());
+	private static final Logger logger = Logger.getLogger(OpencrxServiceProvider.class.getName());
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param context the servlet context
 	 * @param prefix the simple class name of the service provider
 	 * @throws ServiceException
@@ -73,11 +67,12 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @see org.opentdc.tags.ServiceProvider#list(java.lang.String, java.lang.String, long, long)
 	 */
 	@Override
-	public List<TagsModel> list(
-			String queryType, 
-			String query, 
-			int position,
-			int size) {
+	public List<TagTextModel> list(
+		String queryType,
+		String query,
+		int position,
+		int size
+	) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -87,8 +82,8 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public TagsModel create(
-		TagsModel tag) 
-	throws DuplicateException, ValidationException {
+		TagsModel tag
+	) throws DuplicateException, ValidationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,8 +93,8 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public TagsModel read(
-		String id) 
-	throws NotFoundException {
+		String id
+	) throws NotFoundException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -110,8 +105,8 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	@Override
 	public TagsModel update(
 		String id, 
-		TagsModel tag)
-	throws NotFoundException, ValidationException {
+		TagsModel tag
+	) throws NotFoundException, ValidationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -121,45 +116,72 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public void delete(
-		String id) 
-	throws NotFoundException, InternalServerErrorException {
+		String id
+	) throws NotFoundException, InternalServerErrorException {
 		// TODO Auto-generated method stub
-		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opentdc.tags.ServiceProvider#listTexts(java.lang.String, java.lang.String, java.lang.String, int, int)
+	 */
 	@Override
-	public List<LocalizedTextModel> listTexts(String tid, String queryType,
-			String query, int position, int size) {
+	public List<LocalizedTextModel> listTexts(
+		String tid, 
+		String queryType,
+		String query, 
+		int position, 
+		int size
+	) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opentdc.tags.ServiceProvider#createText(java.lang.String, org.opentdc.service.LocalizedTextModel)
+	 */
 	@Override
-	public LocalizedTextModel createText(String tid, LocalizedTextModel tag)
-			throws DuplicateException, ValidationException {
+	public LocalizedTextModel createText(
+		String tid, 
+		LocalizedTextModel tag
+	) throws DuplicateException, ValidationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opentdc.tags.ServiceProvider#readText(java.lang.String, java.lang.String)
+	 */
 	@Override
-	public LocalizedTextModel readText(String tid, String lid)
-			throws NotFoundException {
+	public LocalizedTextModel readText(
+		String tid, 
+		String lid
+	) throws NotFoundException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opentdc.tags.ServiceProvider#updateText(java.lang.String, java.lang.String, org.opentdc.service.LocalizedTextModel)
+	 */
 	@Override
-	public LocalizedTextModel updateText(String tid, String id,
-			LocalizedTextModel tag) throws NotFoundException,
-			ValidationException {
+	public LocalizedTextModel updateText(
+		String tid, 
+		String id,
+		LocalizedTextModel tag
+	) throws NotFoundException, ValidationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opentdc.tags.ServiceProvider#deleteText(java.lang.String, java.lang.String)
+	 */
 	@Override
-	public void deleteText(String tid, String id) throws NotFoundException,
-			InternalServerErrorException {
+	public void deleteText(
+		String tid, 
+		String id
+	) throws NotFoundException, InternalServerErrorException {
 		// TODO Auto-generated method stub
-		
 	}
+	
 }
