@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/opentdc 1 ~ tags-service (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/opentdc 1 ~ services-generic (jre-1.7)"/>
+	<classpathentry kind="con" path="org.eclipse.jst.ws.cxf.core.CXF_CLASSPATH_CONTAINER/Apache CXF/3.0.3">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/opentdc Thirdparty ~ Google GSON (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/openCRX 3 (3.0.0+) ~ Core (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/openMDX 2 (2.14.0+) ~ Core (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/openMDX Thirdparty (2.14.0+) ~ OSGi Enterprise (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/openMDX Thirdparty (2.14.0+) ~ OSGi Extension (jre-1.7)"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/opentdc 1 ~ services-opencrx (jre-1.7)"/>
+	<classpathentry kind="output" path="build/jre-1.7/eclipse"/>
+</classpath>
