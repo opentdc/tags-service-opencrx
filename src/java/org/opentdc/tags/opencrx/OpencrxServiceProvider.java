@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import javax.jdo.JDOHelper;
@@ -94,6 +95,8 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				return 8;
 			case ES:
 				return 2;
+			case RM:
+				return 28;
 			default:
 				return 0;
 		}
@@ -404,6 +407,18 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 		if(codeValueEntry == null || (codeValueEntry.getValidTo() != null && codeValueEntry.getValidTo().getTime() < System.currentTimeMillis())) {
 			throw new org.opentdc.service.exception.NotFoundException(tid);				
 		}
+		if (tag.getText() == null || tag.getText().isEmpty()) {
+			throw new ValidationException("LocalizedText <" + tid + "/lang/" + tag.getId() + "> must contain a valid text.");
+		}
+		// enforce that the title is a single word
+		StringTokenizer _tokenizer = new StringTokenizer(tag.getText());
+		if (_tokenizer.countTokens() != 1) {
+			throw new ValidationException("LocalizedText <" + tid + "/lang/" + tag.getId() + "> must consist of exactly one word <" + tag.getText() + "> (is " + _tokenizer.countTokens() + ").");
+		}
+		if (tag.getLangCode() == null) {
+			throw new ValidationException("LocalizedText <" + tid + "/lang/" + tag.getId() + 
+					"> must contain a LanguageCode.");
+		}		
 		if(tag.getId() != null) {
 			LocalizedTextModel localizedText = null;
 			try {
@@ -415,9 +430,12 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				throw new ValidationException("Localized text <" + tag.getId() + "> contains an ID generated on the client. This is not allowed.");
 			}
 		}
+		int localeIndex = this.getLocaleIndex(tag.getLangCode());
+		if(localeIndex < codeValueEntry.getShortText().size() && !codeValueEntry.getShortText().get(localeIndex).isEmpty()) {
+			throw new DuplicateException("LocalizedText with LanguageCode <" + tag.getLangCode() + "> exists already in tag <" + tid + ">.");			
+		}
 		try {
 			pm.currentTransaction().begin();
-			int localeIndex = this.getLocaleIndex(tag.getLangCode());
 			while(localeIndex >= codeValueEntry.getShortText().size()) {
 				codeValueEntry.getShortText().add("");	
 			}
@@ -477,6 +495,9 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 		List<LocalizedTextModel> localizedTexts = this.mapToLocalizedTexts(codeValueEntry, LanguageCode.valueOf(id));
 		if(localizedTexts.isEmpty()) {
 			throw new org.opentdc.service.exception.NotFoundException(tid);
+		}
+		if(tag.getLangCode() != LanguageCode.valueOf(id)) {
+			throw new ValidationException("LocalizedText <" + tid + "/lang/" + id + ">: it is not allowed to change the LanguageCode.");			
 		}
 		try {
 			pm.currentTransaction().begin();
