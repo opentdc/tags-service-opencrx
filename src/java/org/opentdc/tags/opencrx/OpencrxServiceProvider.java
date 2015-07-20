@@ -49,7 +49,7 @@ import org.opentdc.service.exception.NotFoundException;
 import org.opentdc.service.exception.ValidationException;
 import org.opentdc.tags.ServiceProvider;
 import org.opentdc.tags.TagTextModel;
-import org.opentdc.tags.TagsModel;
+import org.opentdc.tags.TagModel;
 import org.opentdc.util.LanguageCode;
 
 /**
@@ -170,10 +170,10 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @param codeValueEntry
 	 * @return
 	 */
-	protected TagsModel mapToTag(
+	protected TagModel mapToTag(
 		CodeValueEntry codeValueEntry
 	) {
-		TagsModel tag = new TagsModel();
+		TagModel tag = new TagModel();
 		tag.setCreatedAt(codeValueEntry.getCreatedAt());
 		tag.setCreatedBy(codeValueEntry.getCreatedBy().get(0));
 		tag.setModifiedAt(codeValueEntry.getModifiedAt());
@@ -262,8 +262,8 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @see org.opentdc.tags.ServiceProvider#create(org.opentdc.tags.TagsModel)
 	 */
 	@Override
-	public TagsModel create(
-		TagsModel tag
+	public TagModel create(
+		TagModel tag
 	) throws DuplicateException, ValidationException {
 		PersistenceManager pm = this.getPersistenceManager();
 		org.opencrx.kernel.code1.jmi1.Segment codeSegment = this.getCodeSegment();
@@ -304,7 +304,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @see org.opentdc.tags.ServiceProvider#read(java.lang.String)
 	 */
 	@Override
-	public TagsModel read(
+	public TagModel read(
 		String id
 	) throws NotFoundException {
 		org.opencrx.kernel.code1.jmi1.Segment codeSegment = this.getCodeSegment();
@@ -320,9 +320,9 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @see org.opentdc.tags.ServiceProvider#update(java.lang.String, org.opentdc.tags.TagsModel)
 	 */
 	@Override
-	public TagsModel update(
+	public TagModel update(
 		String id, 
-		TagsModel tag
+		TagModel tag
 	) throws NotFoundException, ValidationException {
 		PersistenceManager pm = this.getPersistenceManager();
 		org.opencrx.kernel.code1.jmi1.Segment codeSegment = this.getCodeSegment();
