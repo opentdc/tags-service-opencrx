@@ -48,7 +48,7 @@ import org.opentdc.service.exception.InternalServerErrorException;
 import org.opentdc.service.exception.NotFoundException;
 import org.opentdc.service.exception.ValidationException;
 import org.opentdc.tags.ServiceProvider;
-import org.opentdc.tags.TagTextModel;
+import org.opentdc.tags.SingleLangTag;
 import org.opentdc.tags.TagModel;
 import org.opentdc.util.LanguageCode;
 
@@ -109,20 +109,20 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @param lang
 	 * @return
 	 */
-	protected List<TagTextModel> mapToTagTexts(
+	protected List<SingleLangTag> mapToTagTexts(
 		CodeValueEntry entry,
 		LanguageCode queryLang
 	) {
-		List<TagTextModel> tagTexts = new ArrayList<TagTextModel>();
+		List<SingleLangTag> tagTexts = new ArrayList<SingleLangTag>();
 		for(LanguageCode lang: LanguageCode.values()) {
 			if(queryLang == null || queryLang == lang) {
 				int localeIndex = this.getLocaleIndex(lang);
 				List<String> texts = entry.getShortText();
 				if(localeIndex < texts.size() && !texts.get(localeIndex).isEmpty()) {
-					TagTextModel tagText = new TagTextModel();
+					SingleLangTag tagText = new SingleLangTag();
 					tagText.setCreatedAt(entry.getCreatedAt());
 					tagText.setCreatedBy(entry.getCreatedBy().get(0));
-					tagText.setLang(lang);
+					tagText.setLanguageCode(lang);
 					tagText.setLocalizedTextId(lang.name());
 					tagText.setTagId(entry.refGetPath().getLastSegment().toClassicRepresentation());
 					tagText.setText(texts.get(localeIndex));
@@ -155,7 +155,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 					localizedText.setModifiedAt(entry.getModifiedAt());
 					localizedText.setModifiedBy(entry.getModifiedBy().get(0));
 					localizedText.setId(lang.name());
-					localizedText.setLangCode(lang);
+					localizedText.setLanguageCode(lang);
 					localizedText.setText(texts.get(localeIndex));
 					localizedTexts.add(localizedText);
 				}
@@ -221,7 +221,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 * @see org.opentdc.tags.ServiceProvider#list(java.lang.String, java.lang.String, long, long)
 	 */
 	@Override
-	public List<TagTextModel> list(
+	public List<SingleLangTag> list(
 		String queryType,
 		String query,
 		int position,
@@ -242,7 +242,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				throw new ValidationException("Invalid query " + query);				
 			}
 		}
-		List<TagTextModel> tagTexts = new ArrayList<TagTextModel>();
+		List<SingleLangTag> tagTexts = new ArrayList<SingleLangTag>();
 		CodeValueContainer tagsContainer = this.findTagsContainer(codeSegment);
 		CodeValueEntryQuery codeValueEntryQuery = (CodeValueEntryQuery)pm.newQuery(CodeValueEntry.class);
 		codeValueEntryQuery.orderByCreatedAt().ascending();
@@ -415,7 +415,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 		if (_tokenizer.countTokens() != 1) {
 			throw new ValidationException("LocalizedText <" + tid + "/lang/" + tag.getId() + "> must consist of exactly one word <" + tag.getText() + "> (is " + _tokenizer.countTokens() + ").");
 		}
-		if (tag.getLangCode() == null) {
+		if (tag.getLanguageCode() == null) {
 			throw new ValidationException("LocalizedText <" + tid + "/lang/" + tag.getId() + 
 					"> must contain a LanguageCode.");
 		}		
@@ -430,9 +430,9 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				throw new ValidationException("Localized text <" + tag.getId() + "> contains an ID generated on the client. This is not allowed.");
 			}
 		}
-		int localeIndex = this.getLocaleIndex(tag.getLangCode());
+		int localeIndex = this.getLocaleIndex(tag.getLanguageCode());
 		if(localeIndex < codeValueEntry.getShortText().size() && !codeValueEntry.getShortText().get(localeIndex).isEmpty()) {
-			throw new DuplicateException("LocalizedText with LanguageCode <" + tag.getLangCode() + "> exists already in tag <" + tid + ">.");			
+			throw new DuplicateException("LocalizedText with LanguageCode <" + tag.getLanguageCode() + "> exists already in tag <" + tid + ">.");			
 		}
 		try {
 			pm.currentTransaction().begin();
@@ -440,11 +440,11 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				codeValueEntry.getShortText().add("");	
 			}
 			codeValueEntry.getShortText().set(
-				this.getLocaleIndex(tag.getLangCode()),
+				this.getLocaleIndex(tag.getLanguageCode()),
 				tag.getText()
 			);
 			pm.currentTransaction().commit();
-			return this.readText(tid, tag.getLangCode().name());
+			return this.readText(tid, tag.getLanguageCode().name());
 		} catch(Exception e) {
 			new ServiceException(e).log();
 			try {
@@ -496,7 +496,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 		if(localizedTexts.isEmpty()) {
 			throw new org.opentdc.service.exception.NotFoundException(tid);
 		}
-		if(tag.getLangCode() != LanguageCode.valueOf(id)) {
+		if(tag.getLanguageCode() != LanguageCode.valueOf(id)) {
 			throw new ValidationException("LocalizedText <" + tid + "/lang/" + id + ">: it is not allowed to change the LanguageCode.");			
 		}
 		try {
