@@ -28,12 +28,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.opencrx.kernel.code1.cci2.CodeValueContainerQuery;
 import org.opencrx.kernel.code1.cci2.CodeValueEntryQuery;
@@ -58,7 +59,7 @@ import org.opentdc.util.LanguageCode;
  */
 public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider implements ServiceProvider {
 	
-	private static final Logger logger = Logger.getLogger(OpencrxServiceProvider.class.getName());
+	// private static final Logger logger = Logger.getLogger(OpencrxServiceProvider.class.getName());
 
 	/**
 	 * Constructor.
@@ -120,8 +121,6 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 				List<String> texts = entry.getShortText();
 				if(localeIndex < texts.size() && !texts.get(localeIndex).isEmpty()) {
 					SingleLangTag tagText = new SingleLangTag();
-					tagText.setCreatedAt(entry.getCreatedAt());
-					tagText.setCreatedBy(entry.getCreatedBy().get(0));
 					tagText.setLanguageCode(lang);
 					tagText.setLocalizedTextId(lang.name());
 					tagText.setTagId(entry.refGetPath().getLastSegment().toClassicRepresentation());
@@ -263,6 +262,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public TagModel create(
+		HttpServletRequest request,
 		TagModel tag
 	) throws DuplicateException, ValidationException {
 		PersistenceManager pm = this.getPersistenceManager();
@@ -321,6 +321,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public TagModel update(
+		HttpServletRequest request,
 		String id, 
 		TagModel tag
 	) throws NotFoundException, ValidationException {
@@ -397,6 +398,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public LocalizedTextModel createText(
+		HttpServletRequest request,
 		String tid, 
 		LocalizedTextModel tag
 	) throws DuplicateException, ValidationException {
@@ -481,6 +483,7 @@ public class OpencrxServiceProvider extends AbstractOpencrxServiceProvider imple
 	 */
 	@Override
 	public LocalizedTextModel updateText(
+		HttpServletRequest request,
 		String tid, 
 		String id,
 		LocalizedTextModel tag
